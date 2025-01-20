@@ -1,13 +1,11 @@
 # TODO: Set COMPONENT_NAME to the name of your Python package.
-set(COMPONENT_NAME hpmc_energy)
+set(COMPONENT_NAME hpmc_surface_potential)
 
 # TODO: List all host C++ source code files in _${COMPONENT_NAME}_sources.
 set(_${COMPONENT_NAME}_sources
-    ExampleExternalPotential.cc
-    ExamplePairPotential.cc
+    SurfacePotential.cc
     module.cc
-    ExampleExternalPotential.h
-    ExamplePairPotential.h
+    SurfacePotential.h
     )
 
 # TODO: List all GPU C++ source code files in _${COMPONENT_NAME}_cu_sources.
@@ -18,7 +16,7 @@ set(_${COMPONENT_NAME}_cu_sources
 set(python_files
     __init__.py
     version.py
-    hpmc_energy.py
+    hpmc_surface_potential.py
     )
 
 if (ENABLE_HIP)

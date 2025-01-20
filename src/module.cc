@@ -3,18 +3,16 @@
 
 #include <pybind11/pybind11.h>
 // TODO: Include the header files of classes that will be exported to Python.
-#include "ExampleExternalPotential.h"
-#include "ExamplePairPotential.h"
+#include "SurfacePotential.h"
 
 using namespace hoomd::hpmc::detail;
 
 // TODO: Set the name of the python module to match ${COMPONENT_NAME} (set in
 // CMakeLists.txt), prefixed with an underscore.
-PYBIND11_MODULE(_hpmc_energy, m)
+PYBIND11_MODULE(_hpmc_surface_potential, m)
     {
     // TODO: Call export_Class(m) for each C++ class to be exported to Python.
-    export_ExamplePairPotential(m);
-    export_ExampleExternalPotential(m);
+    export_SurfacePotential(m);
 
 #ifdef ENABLE_HIP
     // TODO: Call export_ClassGPU(m) for each GPU enabled C++ class to be exported
