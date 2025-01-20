@@ -79,14 +79,14 @@ SurfacePotential::ParamType::ParamType(pybind11::dict params)
 
     // TODO: unpack per-type quanties from the Python dictionary to the ParamType struct.
 
-    m_z_substrate = v["m_z_substrate"].cast<LongReal>();
-    m_orientation_epsilon = v["m_orientation_epsilon"].cast<LongReal>();
-    m_theta_sigma = v["m_theta_sigma"].cast<LongReal>();
-    m_phi_sigma = v["m_phi_sigma"].cast<LongReal>();
-    m_smoothing_factor = v["m_smoothing_factor"].cast<LongReal>();
-    m_max_position_epsilon = v["m_max_position_epsilon"].cast<LongReal>();
-    m_y_shift = v["m_y_shift"].cast<LongReal>();
-    m_position_sigma = v["m_position_sigma"].cast<LongReal>();
+    m_z_substrate = v["z_substrate"].cast<LongReal>();
+    m_orientation_epsilon = v["orientation_epsilon"].cast<LongReal>();
+    m_theta_sigma = v["theta_sigma"].cast<LongReal>();
+    m_phi_sigma = v["phi_sigma"].cast<LongReal>();
+    m_smoothing_factor = v["smoothing_factor"].cast<LongReal>();
+    m_max_position_epsilon = v["max_position_epsilon"].cast<LongReal>();
+    m_y_shift = v["y_shift"].cast<LongReal>();
+    m_position_sigma = v["position_sigma"].cast<LongReal>();
     }
 
 pybind11::dict SurfacePotential::ParamType::asDict()
