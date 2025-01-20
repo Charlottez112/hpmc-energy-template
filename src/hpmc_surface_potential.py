@@ -41,7 +41,7 @@ class SurfacePotential(hoomd.hpmc.external.External):
             'particle_types',
             hoomd.data.parameterdicts.TypeParameterDict(z_substrate=float, orientation_epsilon=float,
             theta_sigma=float, phi_sigma=float, smoothing_factor=float, max_position_epsilon=float,
-            y_shift=float, position_sigma=float, len_keys=8),
+            y_shift=float, position_sigma=float, len_keys=1),
         )
         self._add_typeparam(params)
         self.phi_ref_vec = phi_ref_vec
