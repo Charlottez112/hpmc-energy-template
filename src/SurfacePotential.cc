@@ -53,7 +53,7 @@ LongReal SurfacePotential::particleEnergyImplementation(uint64_t timestep,
     LongReal phi_energy = - exp(-phi_arg * phi_arg) * o_epsilon;
 
     // Position energy
-    LongReal position_epsilon = param.m_max_position_epsilon * (cos_theta + param.m_y_shift);
+    LongReal position_epsilon = param.m_max_position_epsilon * (cos_theta * param.m_scale_diff + param.m_y_shift);
     LongReal position_energy = - exp( - dist_from_substrate * param.m_position_sigma) * position_epsilon;
 
     LongReal energy = position_energy + theta_energy + phi_energy;
@@ -85,6 +85,7 @@ SurfacePotential::ParamType::ParamType(pybind11::dict params)
     m_phi_sigma = v["phi_sigma"].cast<LongReal>();
     m_smoothing_factor = v["smoothing_factor"].cast<LongReal>();
     m_max_position_epsilon = v["max_position_epsilon"].cast<LongReal>();
+    m_scale_diff = v["scale_diff"].cast<LongReal>();
     m_y_shift = v["y_shift"].cast<LongReal>();
     m_position_sigma = v["position_sigma"].cast<LongReal>();
     }
@@ -98,6 +99,7 @@ pybind11::dict SurfacePotential::ParamType::asDict()
     pydict["phi_sigma"] = m_phi_sigma;
     pydict["smoothing_factor"] = m_smoothing_factor;
     pydict["max_position_epsilon"] = m_max_position_epsilon;
+    pydict["scale_diff"] = m_scale_diff;
     pydict["y_shift"] = m_y_shift;
     pydict["position_sigma"] = m_position_sigma;
     return pydict;

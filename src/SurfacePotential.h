@@ -85,6 +85,7 @@ class SurfacePotential : public ExternalPotential
         LongReal m_phi_sigma;
         LongReal m_smoothing_factor;
         LongReal m_max_position_epsilon;
+        LongReal m_scale_diff;
         LongReal m_y_shift;
         LongReal m_position_sigma;
         };
