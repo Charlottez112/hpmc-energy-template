@@ -24,39 +24,47 @@ LongReal SurfacePotential::particleEnergyImplementation(uint64_t timestep,
     // TODO: implement the functional form of the external potential.
     const auto& param = m_params[type_i];
 
-    // Make the orientation constraint a function of z
-    LongReal dist_from_substrate = sqrt((r_i.z - param.m_z_substrate) * (r_i.z - param.m_z_substrate));
-    LongReal o_epsilon = exp( - dist_from_substrate * param.m_smoothing_factor) * param.m_orientation_epsilon;
-    // Rotate vector by quaternion
-    vec3<LongReal> rotated_phi_vec = rotate(q_i, m_phi_ref_vec);
-    vec3<LongReal> rotated_theta_vec = rotate(q_i, m_theta_ref_vec);
+    LongReal energy;
+    if (r_i.z > m_bottom)
+    {
+        // Make the orientation constraint a function of z
+        LongReal dist_from_substrate = sqrt((r_i.z - param.m_z_substrate) * (r_i.z - param.m_z_substrate));
+        LongReal o_epsilon = exp( - dist_from_substrate * param.m_smoothing_factor) * param.m_orientation_epsilon;
+        // Rotate vector by quaternion
+        vec3<LongReal> rotated_phi_vec = rotate(q_i, m_phi_ref_vec);
+        vec3<LongReal> rotated_theta_vec = rotate(q_i, m_theta_ref_vec);
 
-    // Project phi vector to xy plane
-    vec3<LongReal> projected_phi_vec(rotated_phi_vec.x,
-                                     rotated_phi_vec.y,
-                                     0.0);
-    vec3<LongReal> normalized_projected_phi_vec = normalize(projected_phi_vec);
+        // Project phi vector to xy plane
+        vec3<LongReal> projected_phi_vec(rotated_phi_vec.x,
+                                        rotated_phi_vec.y,
+                                        0.0);
+        vec3<LongReal> normalized_projected_phi_vec = normalize(projected_phi_vec);
 
-    // Calculate theta for constraint on the flipping motion
-    LongReal cos_theta = dot(m_theta_ref_vec, rotated_theta_vec);
+        // Calculate theta for constraint on the flipping motion
+        LongReal cos_theta = dot(m_theta_ref_vec, rotated_theta_vec);
 
-    // Calculate phi for constraint on rotation in xy plane
-    LongReal cos_phi = dot(m_phi_ref_vec, normalized_projected_phi_vec);
-    LongReal cos_4_phi = cos(4 * acos(cos_phi));
+        // Calculate phi for constraint on rotation in xy plane
+        LongReal cos_phi = dot(m_phi_ref_vec, normalized_projected_phi_vec);
+        LongReal cos_4_phi = cos(4 * acos(cos_phi));
 
-    // Constrain the flipping motion
-    LongReal theta_arg = (abs(cos_theta) - 1) / param.m_theta_sigma;
-    LongReal theta_energy = - exp(-theta_arg * theta_arg) * o_epsilon;
+        // Constrain the flipping motion
+        LongReal theta_arg = (abs(cos_theta) - 1) / param.m_theta_sigma;
+        LongReal theta_energy = - exp(-theta_arg * theta_arg) * o_epsilon;
 
-    // Constrain rotation in xy plane
-    LongReal phi_arg = (cos_4_phi - 1) / param.m_phi_sigma;
-    LongReal phi_energy = - exp(-phi_arg * phi_arg) * o_epsilon;
+        // Constrain rotation in xy plane
+        LongReal phi_arg = (cos_4_phi - 1) / param.m_phi_sigma;
+        LongReal phi_energy = - exp(-phi_arg * phi_arg) * o_epsilon;
 
-    // Position energy
-    LongReal position_epsilon = param.m_max_position_epsilon * (cos_theta * param.m_scale_diff + param.m_y_shift);
-    LongReal position_energy = - exp( - dist_from_substrate * param.m_position_sigma) * position_epsilon;
+        // Position energy
+        LongReal position_epsilon = param.m_max_position_epsilon * (cos_theta * param.m_scale_diff + param.m_y_shift);
+        LongReal position_energy = - exp( - dist_from_substrate * param.m_position_sigma) * position_epsilon;
 
-    LongReal energy = position_energy + theta_energy + phi_energy;
+        energy = position_energy + theta_energy + phi_energy;
+    }
+    else
+    {
+        energy = 20000.0;
+    }
 
     return energy;
     }
@@ -80,6 +88,7 @@ SurfacePotential::ParamType::ParamType(pybind11::dict params)
     // TODO: unpack per-type quanties from the Python dictionary to the ParamType struct.
 
     m_z_substrate = v["z_substrate"].cast<LongReal>();
+    m_bottom = v["bottom"].cast<LongReal>();
     m_orientation_epsilon = v["orientation_epsilon"].cast<LongReal>();
     m_theta_sigma = v["theta_sigma"].cast<LongReal>();
     m_phi_sigma = v["phi_sigma"].cast<LongReal>();
@@ -94,6 +103,7 @@ pybind11::dict SurfacePotential::ParamType::asDict()
     {
     pybind11::dict pydict;
     pydict["z_substrate"] = m_z_substrate;
+    pydict["bottom"] = m_bottom;
     pydict["orientation_epsilon"] = m_orientation_epsilon;
     pydict["theta_sigma"] = m_theta_sigma;
     pydict["phi_sigma"] = m_phi_sigma;

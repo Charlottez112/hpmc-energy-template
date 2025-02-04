@@ -80,6 +80,7 @@ class SurfacePotential : public ExternalPotential
         pybind11::dict asDict();
 
         LongReal m_z_substrate;
+        LongReal m_bottom;
         LongReal m_orientation_epsilon;
         LongReal m_theta_sigma;
         LongReal m_phi_sigma;

@@ -13,6 +13,7 @@ class SurfacePotential(hoomd.hpmc.external.External):
 
     Args:
         z_substrate (float):
+        bottom (float):
         orientation_epsilon (float): 
         theta_sigma (float):
         phi_sigma (float):
@@ -40,7 +41,7 @@ class SurfacePotential(hoomd.hpmc.external.External):
         params = hoomd.data.typeparam.TypeParameter(
             'params',
             'particle_types',
-            hoomd.data.parameterdicts.TypeParameterDict(z_substrate=float, orientation_epsilon=float,
+            hoomd.data.parameterdicts.TypeParameterDict(z_substrate=float, bottom=float, orientation_epsilon=float,
             theta_sigma=float, phi_sigma=float, smoothing_factor=float, max_position_epsilon=float,
             scale_diff=float, y_shift=float, position_sigma=float, len_keys=1),
         )
