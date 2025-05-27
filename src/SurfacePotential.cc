@@ -25,7 +25,7 @@ LongReal SurfacePotential::particleEnergyImplementation(uint64_t timestep,
     const auto& param = m_params[type_i];
 
     LongReal energy;
-    if (r_i.z > m_bottom)
+    if (r_i.z > param.m_bottom)
     {
         // Make the orientation constraint a function of z
         LongReal dist_from_substrate = sqrt((r_i.z - param.m_z_substrate) * (r_i.z - param.m_z_substrate));
